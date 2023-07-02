@@ -1,3 +1,5 @@
+import io.mateo.cxf.codegen.wsdl2java.Wsdl2Java
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.1'
@@ -37,7 +39,7 @@ dependencies {
 }
 
 
-tasks.register("bloomberg", io.mateo.cxf.codegen.wsdl2java.Wsdl2Java) {
+tasks.register("bloomberg", Wsdl2Java) {
     toolOptions {
         wsdl.set(file("${projectDir}/src/main/resources/wsdl/com/bloomberg/services/dlws/dlws.wsdl"))
         autoNameResolution.set(true)

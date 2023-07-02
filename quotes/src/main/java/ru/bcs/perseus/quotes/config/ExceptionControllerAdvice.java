@@ -1,4 +1,4 @@
-package ru.bcs.perseus.quotes.controller.advice;
+package ru.bcs.perseus.quotes.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,9 +18,7 @@ public class ExceptionControllerAdvice {
         exceptionLog(e);
         return ResponseEntity
                 .status(e.getHttpStatus())
-                .body(
-                        new ExceptionResponse(e.getMessage(), e.getDetailed())
-                );
+                .body(new ExceptionResponse(e.getMessage(), e.getDetailed()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -28,9 +26,7 @@ public class ExceptionControllerAdvice {
         exceptionLog(e);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(
-                        new ExceptionResponse(e.getMessage(), null)
-                );
+                .body(new ExceptionResponse(e.getMessage(), null));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -38,9 +34,7 @@ public class ExceptionControllerAdvice {
         exceptionLog(e);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(
-                        new ExceptionResponse(e.getMessage(), null)
-                );
+                .body(new ExceptionResponse(e.getMessage(), null));
     }
 
     private void exceptionLog(Exception e) {

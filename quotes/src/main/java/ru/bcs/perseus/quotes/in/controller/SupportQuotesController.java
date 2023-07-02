@@ -1,20 +1,16 @@
-package ru.bcs.perseus.quotes.controller;
+package ru.bcs.perseus.quotes.in.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.bcs.perseus.quotes.mapper.QuotesMapper;
 import ru.bcs.perseus.quotes.model.dto.AccruedInterestTradeDateWrapper;
 import ru.bcs.perseus.quotes.model.dto.NominalWrapper;
 import ru.bcs.perseus.quotes.model.dto.QuoteDto;
 import ru.bcs.perseus.quotes.model.quotes.Quote;
-import ru.bcs.perseus.quotes.service.CsvParser;
 import ru.bcs.perseus.quotes.service.QuotesService;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,11 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("support")
 @Slf4j
-public class SupportQuotesController extends BaseController {
+public class SupportQuotesController {
 
     private final QuotesService quotesService;
     private final QuotesMapper quotesMapper;
-    private final CsvParser csvParser;
 
     @GetMapping(path = "/byIds")
     public List<Quote> getQuotesByIds(@RequestParam("quoteId") List<String> ids) {
@@ -60,11 +55,6 @@ public class SupportQuotesController extends BaseController {
         return new AmountWrapper(quotesService.getAmountByDate(date));
     }
 
-    @DeleteMapping("all")
-    public void deleteAll() {
-        quotesService.deleteAll();
-    }
-
     @GetMapping("paged")
     public List<Quote> getQuotes(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -89,11 +79,6 @@ public class SupportQuotesController extends BaseController {
         );
     }
 
-    @PostMapping("/csv")
-    public void upload(@RequestParam final MultipartFile file) throws IOException {
-        csvParser.processQuotes(file.getInputStream());
-    }
-
     @PostMapping("/nominal-list")
     public void updateNominalQuote(@RequestBody final List<NominalWrapper> nominalWrapperList) {
         quotesService.updateNominalQuote(nominalWrapperList);
@@ -105,9 +90,6 @@ public class SupportQuotesController extends BaseController {
         quotesService.updateAccruedInterestTradeDate(accruedInterestTradeDateWrappers);
     }
 
-    @Data
-    public static class AmountWrapper {
-
-        private final long amount;
+    public record AmountWrapper(long amount) {
     }
 }
