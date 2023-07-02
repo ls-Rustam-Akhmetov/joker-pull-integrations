@@ -9,10 +9,10 @@ import ru.bcs.perseus.bloomberg.model.db.Sync;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MiniSyncDto {
 
-  private String isin;
-  private Exchange exchange;
+    private String isin;
+    private Exchange exchange;
 
-  public Sync convert() {
-    return new Sync(this.isin, this.exchange);
-  }
+    public Sync convert() {
+        return new Sync(this.isin, this.exchange);
+    }
 }

@@ -7,6 +7,6 @@ import lombok.Value;
 @AllArgsConstructor
 public class QuoteHistoryDownloadedDto {
 
-  private String instrumentId;
+    private String instrumentId;
 
 }

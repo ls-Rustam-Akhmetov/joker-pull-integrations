@@ -13,21 +13,21 @@ import ru.bcs.perseus.bloomberg.model.instrument.Rating;
 @NoArgsConstructor
 public class Bond extends Instrument {
 
-  private BondStatic staticData;
-  private Rating rating;
+    private BondStatic staticData;
+    private Rating rating;
 
-  public Bond(
-      Instrument instrument,
-      BondStatic staticData,
-      Rating rating
-  ) {
-    super(instrument);
-    this.staticData = staticData;
-    this.rating = rating;
-  }
+    public Bond(
+            Instrument instrument,
+            BondStatic staticData,
+            Rating rating
+    ) {
+        super(instrument);
+        this.staticData = staticData;
+        this.rating = rating;
+    }
 
-  @Override
-  public String getIsin() {
-    return staticData != null ? staticData.getIsin() : null;
-  }
+    @Override
+    public String getIsin() {
+        return staticData != null ? staticData.getIsin() : null;
+    }
 }

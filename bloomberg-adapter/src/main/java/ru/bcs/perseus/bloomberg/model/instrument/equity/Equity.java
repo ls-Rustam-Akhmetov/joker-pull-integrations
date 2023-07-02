@@ -11,21 +11,21 @@ import ru.bcs.perseus.bloomberg.model.instrument.Rating;
 @ToString(callSuper = true)
 public class Equity extends Instrument {
 
-  private EquityStatic staticData;
-  private Rating rating;
+    private EquityStatic staticData;
+    private Rating rating;
 
-  public Equity(
-      Instrument instrument,
-      EquityStatic staticData,
-      Rating rating
-  ) {
-    super(instrument);
-    this.staticData = staticData;
-    this.rating = rating;
-  }
+    public Equity(
+            Instrument instrument,
+            EquityStatic staticData,
+            Rating rating
+    ) {
+        super(instrument);
+        this.staticData = staticData;
+        this.rating = rating;
+    }
 
-  @Override
-  public String getIsin() {
-    return staticData != null ? staticData.getIsin() : null;
-  }
+    @Override
+    public String getIsin() {
+        return staticData != null ? staticData.getIsin() : null;
+    }
 }

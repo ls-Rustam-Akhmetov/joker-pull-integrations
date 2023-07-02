@@ -8,6 +8,6 @@ import org.springframework.data.annotation.Id;
 @Getter
 public class CurrencySync {
 
-  @Id
-  private String currencyPair;
+    @Id
+    private String currencyPair;
 }

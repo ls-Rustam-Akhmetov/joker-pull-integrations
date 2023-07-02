@@ -11,8 +11,8 @@ import lombok.ToString;
 @ToString
 public class Rating {
 
-  private String moody;
-  private String sp;
-  private String fitch;
-  private String composite;
+    private String moody;
+    private String sp;
+    private String fitch;
+    private String composite;
 }
