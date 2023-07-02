@@ -1,100 +1,36 @@
-buildscript {
-    ext {
-        springBootVersion = '2.0.7.RELEASE'
-        sonarqubePluginVersion = '2.6.1'
-        gitPropertiesPluginVersion = '1.4.17'
-    }
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion" as Object
-        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:$gitPropertiesPluginVersion" as Object
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$sonarqubePluginVersion" as Object
-    }
-}
 
 plugins {
-    id 'net.ltgt.apt' version '0.10'
+    id 'java'
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'org.sonarqube'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'com.gorylenko.gradle-git-properties'
-apply plugin: 'io.spring.dependency-management'
-
-group = 'ru.bcs.perseus'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
+java {
+    sourceCompatibility = '17'
+}
 
 repositories {
     mavenCentral()
 }
 
-
-ext {
-    springCloudVersion = 'Finchley.SR2'
-    swaggerVersion = '2.9.2'
-    mapstructVersion = '1.2.0.Final'
-    lombokVersion = '1.18.4'
-    validatorVersion = '5.3.4.Final'
-    csvVersion = '1.1'
-}
-
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
-    implementation "org.springframework.cloud:spring-cloud-starter-config"
-    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
-    implementation "org.springframework.cloud:spring-cloud-starter-zipkin"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
-    implementation "org.springframework.cloud:spring-cloud-starter-stream-rabbit"
-    
     // cache
-    compile("org.springframework.boot:spring-boot-starter-cache")
-    compile('com.github.ben-manes.caffeine:caffeine')
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
 
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.2"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 
-    implementation "io.springfox:springfox-swagger2:$swaggerVersion" as Object
-    implementation "io.springfox:springfox-swagger-ui:$swaggerVersion" as Object
-
-    implementation "commons-io:commons-io:2.6"
-    implementation "org.apache.commons:commons-lang3:3.7"
-
-    implementation "org.hibernate:hibernate-validator:$validatorVersion" as Object
-    implementation "com.zaxxer:HikariCP:3.2.0"
-
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}" as Object
-    implementation "org.mapstruct:mapstruct-jdk8:${mapstructVersion}" as Object
-
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}" as String
-    implementation "org.projectlombok:lombok:${lombokVersion}" as String
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     // prometheus
     implementation("io.micrometer:micrometer-registry-prometheus:latest.release")
     implementation "io.micrometer:micrometer-core:latest.release"
 
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation group: "com.github.fakemongo", name: "fongo", version: "2.2.0-RC2"
-    implementation "org.apache.commons:commons-csv:$csvVersion" as Object
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-
-jar {
-    baseName = "${project.name}"
-    project.version = null
+    implementation "org.apache.commons:commons-csv:1.10.0"
 }

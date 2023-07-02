@@ -24,6 +24,4 @@ dist/
 nbdist/
 .nb-gradle/
 
-out/
-
 DLWSCert.p12
