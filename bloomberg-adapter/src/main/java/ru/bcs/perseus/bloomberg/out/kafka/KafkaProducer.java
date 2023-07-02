@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import ru.bcs.perseus.bloomberg.model.dto.ActionDto;
-import ru.bcs.perseus.bloomberg.model.dto.QuoteHistoryDownloadedDto;
 import ru.bcs.perseus.bloomberg.model.instrument.Instrument;
 import ru.bcs.perseus.bloomberg.model.quote.Quote;
 
@@ -21,47 +19,36 @@ public class KafkaProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendAllInstruments(List<Instrument> instruments) {
-        if (CollectionUtils.isEmpty(instruments)) {
-            return;
-        }
-
         instruments.stream()
                 .filter(Objects::nonNull)
                 .forEach(this::sendInstrument);
     }
 
     public void sendQuotes(List<Quote> quotes) {
-        if (CollectionUtils.isEmpty(quotes)) {
-            return;
-        }
-
         quotes.stream()
                 .filter(Objects::nonNull)
                 .forEach(this::sendQuote);
     }
 
     public void sendAllCorporateActions(List<ActionDto> dividends) {
-        if (CollectionUtils.isEmpty(dividends)) {
-            return;
-        }
         dividends.stream()
                 .filter(Objects::nonNull)
                 .forEach(this::sendCorporateAction);
     }
 
     private void sendQuote(Quote quote) {
-        kafkaTemplate.send("quotes", quote.getInstrumentId(), quote);
-        log.info("Quote was created: {}", quote.toString());
+        kafkaTemplate.send("adapter-quotes", quote.getInstrumentId(), quote);
+        log.info("Quote was created: {}", quote);
     }
 
     private void sendInstrument(Instrument instrument) {
-        kafkaTemplate.send("instruments", instrument.getId(), instrument);
-        log.info("Instrument was created: {}", instrument.toString());
+        kafkaTemplate.send("adapter-instruments", instrument.getId(), instrument);
+        log.info("Instrument was created: {}", instrument);
     }
 
     private void sendCorporateAction(final ActionDto action) {
-        kafkaTemplate.send("actions", action.getInstrumentId(), action);
-        log.info("Action was created: {}", action.toString());
+        kafkaTemplate.send("adapter-actions", action.getInstrumentId(), action);
+        log.info("Action was created: {}", action);
     }
 
     public void sendHistoryDownloadedEvent(String instrumentId) {
@@ -70,8 +57,7 @@ public class KafkaProducer {
             return;
         }
 
-        QuoteHistoryDownloadedDto dto = new QuoteHistoryDownloadedDto(instrumentId);
-        kafkaTemplate.send("history_downloaded", instrumentId, instrumentId);
+        kafkaTemplate.send("adapter-history-downloaded", instrumentId, instrumentId);
         log.info("Was send QuoteHistoryDownloadedEvent: {}", instrumentId);
     }
 }
