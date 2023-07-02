@@ -44,32 +44,6 @@ public class BloombergRepository {
     }
 
     /**
-     * retrieve history data from bloomber by request id
-     */
-    public Response requestForQuotesHistoryDataRetrieval(String bloombergRequestId, Sync sync) {
-        RetrieveGetHistoryRequest request = new RetrieveGetHistoryRequest();
-        request.setResponseId(bloombergRequestId);
-
-        RetrieveGetHistoryResponse response = perSecurityWS.retrieveGetHistoryResponse(request);
-        int responseStatusCode = response.getStatusCode().getCode();
-        Response.Status responseStatus = makeResponseStatus(responseStatusCode);
-        List<Quote> quotes = Collections.emptyList();
-        if (Response.Status.DATA_READY == responseStatus) {
-            quotes = response.getInstrumentDatas()
-                    .getInstrumentData()
-                    .stream()
-                    .map(instrument -> QuoteHelper.extractHistoryQuote(instrument, sync))
-                    .filter(Objects::nonNull)
-                    .collect(toList());
-        }
-
-        return Response.builder()
-                .status(responseStatus)
-                .quotes(quotes)
-                .build();
-    }
-
-    /**
      * @param requestType RequestType[INSTRUMENT,QUOTE,COMBINED]
      * @return request_id
      */
@@ -84,41 +58,6 @@ public class BloombergRepository {
                 null,
                 request.getFields(),
                 request.getInstruments(),
-                statusCodeHolder,
-                requestIdHolder,
-                responseIdHolder
-        );
-
-        return responseIdHolder.value;
-    }
-
-    /**
-     * @return request_id
-     */
-    public String requestInstrumentsQuotesHistory(Sync sync, int periodInDays) {
-        Instruments instruments = new Instruments();
-        instruments.getInstrument().add(BloombergRequestHelper.makeHistoryInstrument(sync));
-
-        GetHistoryHeaders headers = new GetHistoryHeaders();
-        DateRange dateRange = new DateRange();
-        Duration duration = new Duration();
-        duration.setDays(periodInDays);
-        dateRange.setDuration(duration);
-        headers.setDaterange(dateRange);
-
-        Fields fields = new Fields();
-
-        fields.getField().add(YLD_CNV_MID);
-        fields.getField().add(PX_LAST);
-
-        Holder<ResponseStatus> statusCodeHolder = new Holder<>();
-        Holder<String> requestIdHolder = new Holder<>();
-        Holder<String> responseIdHolder = new Holder<>();
-
-        perSecurityWS.submitGetHistoryRequest(
-                headers,
-                fields,
-                instruments,
                 statusCodeHolder,
                 requestIdHolder,
                 responseIdHolder

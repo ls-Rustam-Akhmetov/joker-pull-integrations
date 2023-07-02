@@ -34,9 +34,7 @@ public class ResponseParser {
     private ResponseParser() {
     }
 
-    /**
-     * @should return correct result
-     */
+
     public static List<Instrument> retrieveInstruments(List<InstrumentData> instrumentDataList,
                                                        List<String> fields) {
         return instrumentDataList.stream()

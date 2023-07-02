@@ -45,7 +45,6 @@ public class SyncService {
         return syncRepository.findAll();
     }
 
-    // if sync is currency, then make exchange OTC
     public Sync makeCorrectSync(Sync sync) {
         boolean isCurrency = CurrencyHelper.isCurrency(sync.getIsin());
         if (isCurrency) {

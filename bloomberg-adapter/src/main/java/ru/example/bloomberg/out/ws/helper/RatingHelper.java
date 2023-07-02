@@ -12,9 +12,6 @@ public class RatingHelper {
     private RatingHelper() {
     }
 
-    /**
-     * @should return correct result
-     */
     static Rating getRating(Map<String, String> fieldValues) {
 
         String rtgMoodyNoWatch = getStringFieldValue(fieldValues, RTG_MOODY_NO_WATCH);

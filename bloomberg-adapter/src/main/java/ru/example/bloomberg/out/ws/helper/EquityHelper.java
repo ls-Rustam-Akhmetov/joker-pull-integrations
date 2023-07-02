@@ -19,10 +19,6 @@ public class EquityHelper {
     private EquityHelper() {
     }
 
-    /**
-     * @should set correct id
-     * @should return correct result
-     */
     public static Equity createEquity(Map<String, String> fieldValues) {
         Instrument instrument = InstrumentHelper.createInstrument(fieldValues, InstrumentType.EQUITY);
         if (instrument == null) {

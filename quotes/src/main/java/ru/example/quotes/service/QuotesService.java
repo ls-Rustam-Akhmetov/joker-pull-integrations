@@ -121,17 +121,6 @@ public class QuotesService {
         checkQuoteNotNull(quote);
         setQuoteDateTime(quote);
 
-        Quote existing = repository.findByInstrumentIdAndExchangeAndDate(
-                quote.getInstrumentId(),
-                quote.getExchange(),
-                quote.getDate()
-        );
-
-        Quote saveQuote = existing == null ? quote : existing.merge(quote);
-        saveAndSendUpdate(saveQuote);
-    }
-
-    private void saveAndSendUpdate(Quote quote) {
         Quote savedQuote = repository.save(quote);
         quotesCacheService.refreshLastQuote(savedQuote.getInstrumentId());
         quoteKafkaProducer.sendQuote(savedQuote);

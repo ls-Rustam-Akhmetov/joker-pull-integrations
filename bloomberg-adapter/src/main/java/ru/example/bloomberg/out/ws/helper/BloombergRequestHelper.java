@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static ru.example.bloomberg.model.Constant.DividendFields.DVD_HIST_ALL;
 import static ru.example.bloomberg.model.Constant.InstrumentFields.FIGI;
@@ -34,7 +33,7 @@ public class BloombergRequestHelper {
                                                                 RequestType requestType) {
         List<Instrument> instrumentList = syncs.stream()
                 .map(val -> DIVIDENDS == requestType ? makeDividendInstrument(val) : makeInstrument(val))
-                .collect(Collectors.toList());
+                .toList();
 
         Instruments instruments = new Instruments();
         instruments.getInstrument().addAll(instrumentList);
@@ -50,38 +49,21 @@ public class BloombergRequestHelper {
     private static GetDataHeaders makeHeaders(RequestType requestType) {
         GetDataHeaders headers = new GetDataHeaders();
         switch (requestType) {
-            case COMBINED:
-            case INSTRUMENT:
+            case COMBINED, INSTRUMENT -> {
                 headers.setSecmaster(true);
                 headers.setPricing(true);
                 headers.setDerived(true);
-                break;
-            case QUOTE:
+            }
+            case QUOTE -> {
                 headers.setPricing(true);
                 headers.setSecmaster(true);
                 headers.setDerived(true);
-                break;
-            case DIVIDENDS:
-                headers.setHistorical(true);
-                break;
-            default:
-                throw new InternalServerErrorException("no such type processing:" + requestType);
+            }
+            case DIVIDENDS -> headers.setHistorical(true);
+            default -> throw new InternalServerErrorException("no such type processing:" + requestType);
         }
 
         return headers;
-    }
-
-    public static Instrument makeHistoryInstrument(Sync sync) {
-        Instrument instrument = new Instrument();
-
-        if (isCurrency(sync.getInstrumentType())) {
-            instrument.setId(sync.getIsin());
-            instrument.setYellowkey(MarketSector.CURNCY);
-        } else {
-            instrument.setId(sync.getFigi());
-            instrument.setType(InstrumentType.BB_GLOBAL);
-        }
-        return instrument;
     }
 
     private static Instrument makeInstrument(Sync sync) {
@@ -289,17 +271,12 @@ public class BloombergRequestHelper {
     }
 
     private static Fields makeFields(RequestType requestType) {
-        switch (requestType) {
-            case INSTRUMENT:
-                return fillFieldsForInstrumentRequest(new Fields());
-            case QUOTE:
-                return fillFieldsForQuoteRequest(new Fields());
-            case COMBINED:
-                return fillCombinedFields();
-            case DIVIDENDS:
-                return fillDividendFields(new Fields());
-            default:
-                throw new InternalServerErrorException("no such type processing:" + requestType);
-        }
+        return switch (requestType) {
+            case INSTRUMENT -> fillFieldsForInstrumentRequest(new Fields());
+            case QUOTE -> fillFieldsForQuoteRequest(new Fields());
+            case COMBINED -> fillCombinedFields();
+            case DIVIDENDS -> fillDividendFields(new Fields());
+            default -> throw new InternalServerErrorException("no such type processing:" + requestType);
+        };
     }
 }

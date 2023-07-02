@@ -32,7 +32,7 @@ import static ru.example.bloomberg.model.Constant.QuoteFields.ID_ISIN;
 import static ru.example.bloomberg.model.Constant.QuoteFields.MARKET_SECTOR_DES;
 import static ru.example.bloomberg.model.Constant.QuoteFields.TICKER;
 import static ru.example.bloomberg.model.Constant.QuoteFields.*;
-import static ru.example.bloomberg.util.BloombergUtils.getAccruedInterest;
+import static ru.example.bloomberg.out.ws.helper.BloombergUtils.getAccruedInterest;
 
 @Slf4j
 public class QuoteHelper {

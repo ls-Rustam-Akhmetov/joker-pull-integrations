@@ -1,4 +1,4 @@
-package ru.example.bloomberg.util;
+package ru.example.bloomberg.out.ws.helper;
 
 import java.math.BigDecimal;
 

@@ -12,17 +12,13 @@ import java.util.Map;
 
 import static ru.example.bloomberg.model.Constant.InstrumentFields.*;
 import static ru.example.bloomberg.model.Constant.QuoteFields.PREV_FLT_CPN;
-import static ru.example.bloomberg.util.BloombergUtils.getAccruedInterest;
+import static ru.example.bloomberg.out.ws.helper.BloombergUtils.getAccruedInterest;
 
 public class BondHelper {
 
     private BondHelper() {
     }
 
-    /**
-     * @should return correct result
-     * @should set correct id when there is no isin
-     */
     public static Bond createBond(Map<String, String> fieldValues) {
         Instrument instrument = InstrumentHelper.createInstrument(fieldValues, InstrumentType.BOND);
         if (instrument == null) {

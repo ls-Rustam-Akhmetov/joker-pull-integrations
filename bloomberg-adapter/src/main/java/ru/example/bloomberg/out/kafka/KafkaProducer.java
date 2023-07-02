@@ -52,15 +52,5 @@ public class KafkaProducer {
         kafkaTemplate.send(ACTIONS_TOPIC_NAME, action.getInstrumentId(), action);
         log.info("Action was created: {}", action);
     }
-
-    public void sendHistoryDownloadedEvent(String instrumentId) {
-        boolean isValidDto = Objects.nonNull(instrumentId);
-        if (!isValidDto) {
-            return;
-        }
-
-        kafkaTemplate.send(HISTORY_TOPIC_NAME, instrumentId, instrumentId);
-        log.info("Was send QuoteHistoryDownloadedEvent: {}", instrumentId);
-    }
 }
 

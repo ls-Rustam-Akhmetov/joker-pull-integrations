@@ -2,14 +2,16 @@ package ru.example.bloomberg.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import ru.example.bloomberg.config.BloombergConfig;
 import ru.example.bloomberg.mapper.ActionMapper;
 import ru.example.bloomberg.model.Response;
-import ru.example.bloomberg.model.db.*;
+import ru.example.bloomberg.model.db.RequestLog;
+import ru.example.bloomberg.model.db.RequestLogStatus;
+import ru.example.bloomberg.model.db.RequestType;
+import ru.example.bloomberg.model.db.Sync;
 import ru.example.bloomberg.model.instrument.Dividend;
 import ru.example.bloomberg.model.instrument.Instrument;
 import ru.example.bloomberg.model.quote.Quote;
@@ -19,13 +21,7 @@ import ru.example.bloomberg.out.ws.BloombergRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
-
-import static java.util.Collections.singletonList;
-import static ru.example.bloomberg.model.db.RequestType.COMBINED;
-import static ru.example.bloomberg.model.db.RequestType.QUOTES_HISTORY;
 
 
 @Slf4j
@@ -38,20 +34,12 @@ public class BloombergService {
     private final KafkaProducer kafkaProducer;
     private final BloombergConfig bloombergConfig;
     private final SyncService syncService;
-    private final ExecutorService executorService;
-    private final HistoryQuoteDownloadStatusService historyQuoteDownloadStatusService;
 
     public void requestForDataPreparation(List<Sync> syncs, RequestType requestType) {
         if (CollectionUtils.isEmpty(syncs)) {
             return;
         }
-        log.info("Try make bloomberg request for data preparation with ids: {} and requestType:{}",
-                syncs, requestType.toString());
-
         String responseId = bloombergRepository.requestForDataPreparation(syncs, requestType);
-
-        log.info("The request was successful, returned request_id: {}", responseId);
-
         RequestLog requestLog = RequestLog.builder()
                 .responseId(responseId)
                 .syncs(syncs)
@@ -60,39 +48,6 @@ public class BloombergService {
                 .status(RequestLogStatus.PENDING)
                 .build();
         requestLogService.save(requestLog);
-    }
-
-    public void requestHistoryQuotesPreparation(Sync sync) {
-        String instrumentId = sync.getFigi();
-        if (StringUtils.isEmpty(instrumentId)) {
-            log.warn("No instrumentId for quotes history request[{}]", sync);
-            return;
-        }
-
-        Optional<HistoryQuotesDownloadStatus> optionalHistoryRecord =
-                historyQuoteDownloadStatusService.findById(instrumentId);
-        boolean isHistoryQuoteRequestAlreadyWasMade = optionalHistoryRecord.isPresent();
-
-        if (isHistoryQuoteRequestAlreadyWasMade) {
-            HistoryQuotesDownloadStatus historyRecord = optionalHistoryRecord.get();
-            log.warn("Abort history quote request, it was already made in the past: {}", historyRecord);
-            return;
-        }
-
-        log.info("Retrieve history quotes for {}", sync);
-        int historyPeriodInDays = bloombergConfig.getHistoryPeriodInDays();
-        String responseId = bloombergRepository
-                .requestInstrumentsQuotesHistory(sync, historyPeriodInDays);
-
-        RequestLog requestLog = RequestLog.builder()
-                .responseId(responseId)
-                .syncs(singletonList(sync))
-                .requestDateTime(LocalDateTime.now())
-                .requestType(QUOTES_HISTORY)
-                .status(RequestLogStatus.PENDING)
-                .build();
-        requestLogService.save(requestLog);
-        historyQuoteDownloadStatusService.insert(instrumentId);
     }
 
     @Scheduled(cron = "0 */10 * * * ?")
@@ -109,7 +64,7 @@ public class BloombergService {
                 .forEach(requestLogService::save);
     }
 
-    RequestLog makeRequestToRetrieveData(RequestLog requestLog) {
+    private RequestLog makeRequestToRetrieveData(RequestLog requestLog) {
         String bloombergRequestId = requestLog.getResponseId();
         RequestLog resultResponseLog = requestLog.toBuilder().build();
 
@@ -120,12 +75,7 @@ public class BloombergService {
         Response response;
         Sync requestSync = requestLog.getSyncs().get(0);
         try {
-            if (QUOTES_HISTORY == requestLog.getRequestType()) {
-                response = bloombergRepository.
-                        requestForQuotesHistoryDataRetrieval(bloombergRequestId, requestSync);
-            } else {
-                response = bloombergRepository.requestForDataRetrieval(bloombergRequestId);
-            }
+            response = bloombergRepository.requestForDataRetrieval(bloombergRequestId);
         } catch (Exception e) {
             log.error("Sync: {}, Error processed while try to retrieve data: {}",
                     requestSync,
@@ -154,34 +104,16 @@ public class BloombergService {
         return resultResponseLog;
     }
 
-    private void requestHistoryQuotesPreparation(Instrument newInstrument) {
-        Sync sync = new Sync(newInstrument.getIsin(), newInstrument.getExchange());
-        sync.setFigi(newInstrument.getId());
-        sync.setCurrency(newInstrument.getCurrency());
-        sync.setInstrumentType(newInstrument.getType());
-        requestHistoryQuotesPreparation(sync);
-    }
-
     private void dataReadyProcessing(RequestLog requestLog, Response response) {
         List<Quote> quotes = response.getQuotes();
-        if (QUOTES_HISTORY == requestLog.getRequestType()) {
-            log.info("Response for history quotes: {}", quotes);
-            finishHistoryQuoteProcessing(quotes);
-        } else {
-            List<Instrument> instruments = response.getInstruments();
-            final List<Dividend> dividends = response.getDividends();
-            fillInstrumentsWithExchange(requestLog.getSyncs(), instruments, quotes);
-            saveFigiToSynchronizations(requestLog.getSyncs(), instruments, quotes);
+        List<Instrument> instruments = response.getInstruments();
+        List<Dividend> dividends = response.getDividends();
+        fillInstrumentsWithExchange(requestLog.getSyncs(), instruments, quotes);
+        saveFigiToSynchronizations(requestLog.getSyncs(), instruments, quotes);
 
-            kafkaProducer.sendAllInstruments(instruments);
-            kafkaProducer.sendQuotes(quotes);
-            kafkaProducer.sendAllCorporateActions(ActionMapper.map(dividends));
-
-            if (COMBINED == requestLog.getRequestType()) {
-                Instrument newInstrument = instruments.get(0);
-                executorService.execute(() -> requestHistoryQuotesPreparation(newInstrument));
-            }
-        }
+        kafkaProducer.sendAllInstruments(instruments);
+        kafkaProducer.sendQuotes(quotes);
+        kafkaProducer.sendAllCorporateActions(ActionMapper.map(dividends));
     }
 
     private void fillInstrumentsWithExchange(List<Sync> syncs, List<Instrument> instruments,
@@ -232,16 +164,5 @@ public class BloombergService {
         List<Sync> correctSync = updatedSyncs.stream()
                 .filter(sync -> sync.getIsin() != null).collect(Collectors.toList());
         syncService.save(correctSync);
-    }
-
-    private void finishHistoryQuoteProcessing(List<Quote> quotes) {
-        if (CollectionUtils.isEmpty(quotes)) {
-            return;
-        }
-
-        String instrumentId = quotes.get(0).getInstrumentId();
-        kafkaProducer.sendQuotes(quotes);
-        historyQuoteDownloadStatusService.saveDownloadTime(instrumentId, LocalDateTime.now());
-        kafkaProducer.sendHistoryDownloadedEvent(instrumentId);
     }
 }

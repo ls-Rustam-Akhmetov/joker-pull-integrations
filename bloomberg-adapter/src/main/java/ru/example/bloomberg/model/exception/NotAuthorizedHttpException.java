@@ -2,7 +2,7 @@ package ru.example.bloomberg.model.exception;
 
 import org.springframework.http.HttpStatus;
 
-@SuppressWarnings("squid:S2166")
+
 public class NotAuthorizedHttpException extends HttpException {
 
     public NotAuthorizedHttpException(String message, String detailed) {

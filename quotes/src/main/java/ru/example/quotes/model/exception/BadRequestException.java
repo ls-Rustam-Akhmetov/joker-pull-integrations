@@ -2,7 +2,6 @@ package ru.example.quotes.model.exception;
 
 import org.springframework.http.HttpStatus;
 
-@SuppressWarnings("squid:S2166")
 public class BadRequestException extends HttpException {
 
     public BadRequestException(String message, String detailed) {

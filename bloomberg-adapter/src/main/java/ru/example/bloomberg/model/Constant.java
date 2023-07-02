@@ -11,10 +11,8 @@ public abstract class Constant {
     private Constant() {
     }
 
-    @SuppressWarnings("squid:S1214")
     public interface InstrumentFields {
 
-        // fields for instruments
         String MARKET_SECTOR_DES = "MARKET_SECTOR_DES";
         String SECURITY_DES = "SECURITY_DES";
         String TICKER = "TICKER";
@@ -91,10 +89,8 @@ public abstract class Constant {
         String IS_PERPETUAL = "IS_PERPETUAL";
     }
 
-    @SuppressWarnings("squid:S1214")
     public interface QuoteFields {
 
-        //fields for quote request
         String MARKET_SECTOR_DES = "MARKET_SECTOR_DES";
         String TICKER = "TICKER";
         String ID_ISIN = "ID_ISIN";
@@ -141,7 +137,6 @@ public abstract class Constant {
         String EQY_DVD_SPL_EX_FLAG = "EQY_DVD_SPL_EX_FLAG";
     }
 
-    @SuppressWarnings("squid:S1214")
     public interface InstrumentFieldsReadable {
 
         String ISIN_FIELD = "isin";
@@ -228,7 +223,6 @@ public abstract class Constant {
         String IS_PERPETUAL_FIELD = "isPerpetual";
     }
 
-    @SuppressWarnings("squid:S1214")
     public interface DividendFields {
         String DVD_HIST_ALL = "DVD_HIST_ALL";
     }
