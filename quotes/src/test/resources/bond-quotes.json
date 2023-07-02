@@ -1,0 +1,47 @@
+[
+  {
+    "instrumentId": "KZ2C00002715",
+    "source": "quik",
+    "timestamp": "2017-12-12T12:12:22.222Z",
+    "user": "system",
+    "type": "bond",
+    "ticker": "GAZPRU 2.85 10/25/19",
+    "exchange": "MOEX",
+    "quotesData": {
+      "bid": "90.7",
+      "ask": "90",
+      "last": "90.8",
+      "close": "99.9"
+    }
+  },
+  {
+    "instrumentId": "KZ2C00002715",
+    "source": "bloom-offline",
+    "timestamp": "2017-12-12T12:12:22.222Z",
+    "user": "system",
+    "type": "bond",
+    "ticker": "GAZPRU 2.85 10/25/19",
+    "exchange": "OTC",
+    "quotesData": {
+      "bid": "100",
+      "ask": "100",
+      "last": "100",
+      "close": "100"
+    }
+  },
+  {
+    "instrumentId": "KZ2C00002717",
+    "source": "quik",
+    "timestamp": "2017-12-12T12:12:22.222Z",
+    "user": "system",
+    "type": "bond",
+    "ticker": "GAZPRU 2.85 10/25/19",
+    "exchange": "MOEX",
+    "quotesData": {
+      "bid": "90.7",
+      "ask": "90",
+      "last": "90.8",
+      "close": "99.9"
+    }
+  }
+]

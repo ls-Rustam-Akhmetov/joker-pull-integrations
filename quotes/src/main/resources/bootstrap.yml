@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: quotes
+  cloud:
+    config:
+      uri: http://localhost:8888
+      failFast: false
+      retry:
+        initialInterval: 3000
+        maxAttempts: 100
+
+historical-quote:
+  table:
+    name: DWH_PERSBROKER.DWH.vHistorical_Quotes
+
+quik.source.name: QUIK
+bloomberg.source.name: BLOOMBERG-ADAPTER
+
+---
+spring:
+  profiles: test, prod
+
+  cloud:
+    config:
+      uri: http://perseus-config.perseus.svc.cluster.local:8888
