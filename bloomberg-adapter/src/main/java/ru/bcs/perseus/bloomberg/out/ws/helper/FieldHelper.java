@@ -21,10 +21,6 @@ public class FieldHelper {
     private FieldHelper() {
     }
 
-    /**
-     * @should return correct result
-     * @should log when exception was thrown
-     */
     public static LocalDate getLocalDateFieldValue(Map<String, String> fieldValues,
                                                    String fieldName) {
         String value = fieldValues.get(fieldName);
@@ -41,10 +37,6 @@ public class FieldHelper {
         return null;
     }
 
-    /**
-     * @should return correct result
-     * @should log when exception was thrown
-     */
     public static BigDecimal getBigDecimalFieldValue(Map<String, String> fieldValues,
                                                      String fieldName) {
         String value = fieldValues.get(fieldName);
@@ -61,10 +53,6 @@ public class FieldHelper {
         return null;
     }
 
-    /**
-     * @should return correct result
-     * @should log when exception was thrown
-     */
     public static BigDecimal getBigDecimalValue(String value) {
         if (isEmptyValue(value)) {
             return null;
@@ -79,10 +67,6 @@ public class FieldHelper {
         return null;
     }
 
-    /**
-     * @should return correct result
-     * @should log when exception was thrown
-     */
     public static Long getLongFieldValue(Map<String, String> fieldValues, String fieldName) {
         String value = fieldValues.get(fieldName);
         if (isEmptyValue(value)) {
@@ -98,10 +82,6 @@ public class FieldHelper {
         return null;
     }
 
-    /**
-     * @should return correct result
-     * @should log when exception was thrown
-     */
     public static Integer getIntFieldValue(Map<String, String> fieldValues, String fieldName) {
         String value = fieldValues.get(fieldName);
         if (isEmptyValue(value)) {
@@ -117,26 +97,16 @@ public class FieldHelper {
         return null;
     }
 
-    /**
-     * @should return correct result
-     * @should log when exception was thrown
-     */
     public static boolean getBooleanFromYNString(Map<String, String> fieldValues, String fieldName) {
         String value = fieldValues.get(fieldName);
         if (isEmptyValue(value)) {
             return false;
         }
 
-        switch (value) {
-            case "Y":
-                return true;
-            case "N":
-                return false;
-            default:
-                log.warn("Unable to parse value \"{}\" to Boolean", value);
-        }
-
-        return false;
+        return switch (value) {
+            case "Y" -> true;
+            default -> false;
+        };
     }
 
     public static String getStringFieldValue(Map<String, String> fieldValues, String fieldName) {
@@ -157,11 +127,7 @@ public class FieldHelper {
         if (marketSectorField == null) {
             return null;
         }
-        MarketSector marketSector = EnumUtils
+        return EnumUtils
                 .getEnum(MarketSector.class, marketSectorField.toUpperCase());
-        if (marketSector == null) {
-            return null;
-        }
-        return marketSector;
     }
 }
