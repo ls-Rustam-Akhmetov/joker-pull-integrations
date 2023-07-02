@@ -1,6 +1,5 @@
-package ru.example.quotes.repository;
+package ru.example.quotes.out.db;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.example.quotes.model.quotes.Exchange;
@@ -24,14 +23,10 @@ public interface QuotesRepository extends MongoRepository<Quote, String> {
 
     List<Quote> findAllByInstrumentId(String instrumentId);
 
-    List<Quote> findByIdIn(Collection<String> ids);
-
     List<Quote> findByIsinInAndDate(Collection<String> isins, LocalDate date);
 
     List<Quote> findByInstrumentIdInAndDate(Collection<String> instrumentIds, LocalDate date,
                                             Pageable pageable);
-
-    Page<Quote> findByDate(Pageable pageRequest, LocalDate date);
 
     Optional<Quote> findFirstByIsinAndDate(String isin, LocalDate date);
 
@@ -41,7 +36,4 @@ public interface QuotesRepository extends MongoRepository<Quote, String> {
 
     List<Quote> findByInstrumentIdOrderByDateDesc(String instrumentId, Pageable pageable);
 
-    void deleteByDateBefore(LocalDate date);
-
-    long countAllByDate(LocalDate date);
 }

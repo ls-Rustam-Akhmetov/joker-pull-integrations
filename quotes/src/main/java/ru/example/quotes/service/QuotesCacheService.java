@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ru.example.quotes.model.quotes.Quote;
-import ru.example.quotes.repository.QuotesRepository;
+import ru.example.quotes.out.db.QuotesRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +21,8 @@ public class QuotesCacheService {
     }
 
     @CachePut(key = "#instrumentId", unless = "#result == null")
-    public Quote refreshLastQuote(String instrumentId) {
-        return getLastQuoteByInstrumentId(instrumentId);
+    public void refreshLastQuote(String instrumentId) {
+        getLastQuoteByInstrumentId(instrumentId);
     }
 
     private Quote getLastQuoteByInstrumentId(String instrumentId) {

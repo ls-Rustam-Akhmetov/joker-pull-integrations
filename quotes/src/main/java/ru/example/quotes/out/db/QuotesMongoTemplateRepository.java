@@ -1,4 +1,4 @@
-package ru.example.quotes.repository;
+package ru.example.quotes.out.db;
 
 import com.mongodb.client.DistinctIterable;
 import lombok.RequiredArgsConstructor;

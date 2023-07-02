@@ -13,6 +13,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import ru.example.quotes.model.quotes.Quote;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,9 @@ import java.util.Map;
 @Configuration
 @EnableKafka
 public class KafkaConfig {
+
+    public static final String QUOTES_TOPIC_NAME = "quotes";
+    public static final String QUOTES_ADAPTER_TOPIC_NAME = "adapter-quotes";
 
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
@@ -32,12 +36,17 @@ public class KafkaConfig {
     }
 
     @Bean
-    public NewTopic topic1() {
-        return new NewTopic("taiberium", 1, (short) 1);
+    public NewTopic adapterQuotes() {
+        return new NewTopic(QUOTES_ADAPTER_TOPIC_NAME, 3, (short) 3);
     }
 
     @Bean
-    public ProducerFactory<String, Object> producerFactory() {
+    public NewTopic quotes() {
+        return new NewTopic(QUOTES_TOPIC_NAME, 3, (short) 3);
+    }
+
+    @Bean
+    public ProducerFactory<String, Quote> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -46,7 +55,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
+    public KafkaTemplate<String, Quote> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
