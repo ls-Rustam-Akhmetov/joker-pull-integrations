@@ -11,6 +11,8 @@ import ru.bcs.perseus.bloomberg.model.quote.Quote;
 import java.util.List;
 import java.util.Objects;
 
+import static ru.bcs.perseus.bloomberg.config.KafkaConfig.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,17 +39,17 @@ public class KafkaProducer {
     }
 
     private void sendQuote(Quote quote) {
-        kafkaTemplate.send("adapter-quotes", quote.getInstrumentId(), quote);
+        kafkaTemplate.send(QUOTES_TOPIC_NAME, quote.getInstrumentId(), quote);
         log.info("Quote was created: {}", quote);
     }
 
     private void sendInstrument(Instrument instrument) {
-        kafkaTemplate.send("adapter-instruments", instrument.getId(), instrument);
+        kafkaTemplate.send(INSTRUMENTS_TOPIC_NAME, instrument.getId(), instrument);
         log.info("Instrument was created: {}", instrument);
     }
 
     private void sendCorporateAction(final ActionDto action) {
-        kafkaTemplate.send("adapter-actions", action.getInstrumentId(), action);
+        kafkaTemplate.send(ACTIONS_TOPIC_NAME, action.getInstrumentId(), action);
         log.info("Action was created: {}", action);
     }
 
@@ -57,7 +59,7 @@ public class KafkaProducer {
             return;
         }
 
-        kafkaTemplate.send("adapter-history-downloaded", instrumentId, instrumentId);
+        kafkaTemplate.send(HISTORY_TOPIC_NAME, instrumentId, instrumentId);
         log.info("Was send QuoteHistoryDownloadedEvent: {}", instrumentId);
     }
 }

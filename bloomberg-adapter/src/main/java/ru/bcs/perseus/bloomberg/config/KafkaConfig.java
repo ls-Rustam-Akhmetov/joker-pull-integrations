@@ -19,6 +19,11 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
+    public static final String QUOTES_TOPIC_NAME = "adapter-quotes";
+    public static final String INSTRUMENTS_TOPIC_NAME = "adapter-instruments";
+    public static final String ACTIONS_TOPIC_NAME = "adapter-actions";
+    public static final String HISTORY_TOPIC_NAME = "adapter-history";
+
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
@@ -30,8 +35,23 @@ public class KafkaConfig {
     }
 
     @Bean
-    public NewTopic topic1() {
-        return new NewTopic("taiberium", 1, (short) 1);
+    public NewTopic adapterQuotes() {
+        return new NewTopic(QUOTES_TOPIC_NAME, 3, (short) 3);
+    }
+
+    @Bean
+    public NewTopic adapterInstruments() {
+        return new NewTopic(INSTRUMENTS_TOPIC_NAME, 3, (short) 3);
+    }
+
+    @Bean
+    public NewTopic adapterActions() {
+        return new NewTopic(ACTIONS_TOPIC_NAME, 3, (short) 3);
+    }
+
+    @Bean
+    public NewTopic adapterHistory() {
+        return new NewTopic(HISTORY_TOPIC_NAME, 3, (short) 3);
     }
 
     @Bean
