@@ -8,7 +8,6 @@ import ru.example.bloomberg.model.db.Sync;
 
 import java.util.List;
 
-import static ru.example.bloomberg.model.db.RequestType.DIVIDENDS;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,7 @@ public class BloombergSyncService {
     }
 
     public void syncDividends(final List<Sync> syncs) {
-        bloombergService.requestForDataPreparation(syncs, DIVIDENDS);
+        bloombergService.requestForDataPreparation(syncs, RequestType.DIVIDENDS);
     }
 
     private void syncByRequestType(RequestType requestType) {

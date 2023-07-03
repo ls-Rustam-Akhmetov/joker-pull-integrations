@@ -14,9 +14,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("synchronizations")
+@RequestMapping("sync")
 @RequiredArgsConstructor
-public class SyncController {
+public class SyncListController {
 
     private final SyncService service;
 

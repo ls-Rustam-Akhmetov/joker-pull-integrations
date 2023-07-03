@@ -16,7 +16,7 @@ import ru.example.bloomberg.model.instrument.Dividend;
 import ru.example.bloomberg.model.instrument.Instrument;
 import ru.example.bloomberg.model.quote.Quote;
 import ru.example.bloomberg.out.kafka.KafkaProducer;
-import ru.example.bloomberg.out.ws.BloombergRepository;
+import ru.example.bloomberg.out.ws.BloombergAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BloombergService {
 
-    private final BloombergRepository bloombergRepository;
+    private final BloombergAdapter bloombergAdapter;
     private final RequestLogService requestLogService;
     private final KafkaProducer kafkaProducer;
     private final BloombergConfig bloombergConfig;
@@ -39,7 +39,7 @@ public class BloombergService {
         if (CollectionUtils.isEmpty(syncs)) {
             return;
         }
-        String responseId = bloombergRepository.requestForDataPreparation(syncs, requestType);
+        String responseId = bloombergAdapter.requestForDataPreparation(syncs, requestType);
         RequestLog requestLog = RequestLog.builder()
                 .responseId(responseId)
                 .syncs(syncs)
@@ -75,7 +75,7 @@ public class BloombergService {
         Response response;
         Sync requestSync = requestLog.getSyncs().get(0);
         try {
-            response = bloombergRepository.requestForDataRetrieval(bloombergRequestId);
+            response = bloombergAdapter.requestForDataRetrieval(bloombergRequestId);
         } catch (Exception e) {
             log.error("Sync: {}, Error processed while try to retrieve data: {}",
                     requestSync,

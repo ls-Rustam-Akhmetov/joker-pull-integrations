@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 @Repository
 @AllArgsConstructor
-public class BloombergRepository {
+public class BloombergAdapter {
 
     private static final int DATA_READY_STATUS = 0;
     private static final int DATA_PROCESSING_IN_PROGRESS_STATUS = 100;
