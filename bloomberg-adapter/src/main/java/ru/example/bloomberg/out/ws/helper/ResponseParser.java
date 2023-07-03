@@ -125,7 +125,7 @@ public class ResponseParser {
             return null;
         }
         try {
-            return LocalDate.parse(dateString, FieldHelper.DATE_FORMATTER);
+            return LocalDate.parse(dateString, FieldParser.DATE_FORMATTER);
         } catch (DateTimeParseException e) {
             log.warn("Unable to parse value \"{}\" to LocalDate", dateString);
             return null;
@@ -165,15 +165,15 @@ public class ResponseParser {
     }
 
     private static Instrument createInstrument(Map<String, String> fieldValues) {
-        MarketSector marketSector = FieldHelper.getMarketSector(fieldValues);
+        MarketSector marketSector = FieldParser.getMarketSector(fieldValues);
         if (marketSector == null) {
             log.warn("Not created instrument from response field {} because market sector is unknown", fieldValues);
             return null;
         }
 
         return switch (marketSector) {
-            case EQUITY -> EquityHelper.createEquity(fieldValues);
-            case CORP, GOVT -> BondHelper.createBond(fieldValues);
+            case EQUITY -> EquityParser.createEquity(fieldValues);
+            case CORP, GOVT -> BondParser.createBond(fieldValues);
             default -> null;
         };
     }
@@ -187,7 +187,7 @@ public class ResponseParser {
     private static Quote createQuote(InstrumentData instrumentData, List<String> fields) {
         Map<String, String> fieldValues = makeFieldValues(instrumentData, fields);
         log.debug("Field values for quotes from bloomberg:{}", fieldValues);
-        return QuoteHelper.createQuote(fieldValues);
+        return QuoteParser.createQuote(fieldValues);
     }
 
 }

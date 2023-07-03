@@ -31,7 +31,7 @@ public class BloombergRepository {
      * retrieve data from bloomber by request id
      */
     public Response requestForDataRetrieval(String bloombergRequestId) {
-        RetrieveGetDataResponse response = retrieveResponse(bloombergRequestId);
+        RetrieveGetDataResponse response = makeRequestForData(bloombergRequestId);
         int responseStatusCode = response.getStatusCode().getCode();
         Response.Status responseStatus = makeResponseStatus(responseStatusCode);
         return makeResponse(response, responseStatus);
@@ -82,7 +82,7 @@ public class BloombergRepository {
                 .build();
     }
 
-    private RetrieveGetDataResponse retrieveResponse(String responseId) {
+    private RetrieveGetDataResponse makeRequestForData(String responseId) {
         RetrieveGetDataRequest retrieveGetDataRequest = new RetrieveGetDataRequest();
         retrieveGetDataRequest.setResponseId(responseId);
 

@@ -14,11 +14,11 @@ import java.util.Map;
 import static ru.example.bloomberg.model.Constant.InstrumentFields.MARKET_SECTOR_DES;
 
 @Slf4j
-public class FieldHelper {
+public class FieldParser {
 
     static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-    private FieldHelper() {
+    private FieldParser() {
     }
 
     public static LocalDate getLocalDateFieldValue(Map<String, String> fieldValues,
@@ -40,20 +40,6 @@ public class FieldHelper {
     public static BigDecimal getBigDecimalFieldValue(Map<String, String> fieldValues,
                                                      String fieldName) {
         String value = fieldValues.get(fieldName);
-        if (isEmptyValue(value)) {
-            return null;
-        }
-
-        try {
-            return new BigDecimal(value);
-        } catch (NumberFormatException nfe) {
-            log.warn("Unable to parse value \"{}\" to BigDecimal", value);
-        }
-
-        return null;
-    }
-
-    public static BigDecimal getBigDecimalValue(String value) {
         if (isEmptyValue(value)) {
             return null;
         }

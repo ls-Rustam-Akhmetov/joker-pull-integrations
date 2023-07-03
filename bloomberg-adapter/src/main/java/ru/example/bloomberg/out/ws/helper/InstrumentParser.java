@@ -13,29 +13,29 @@ import java.util.Map;
 import static ru.example.bloomberg.model.Constant.InstrumentFields.*;
 
 @Slf4j
-public class InstrumentHelper {
+public class InstrumentParser {
 
-    private InstrumentHelper() {
+    private InstrumentParser() {
     }
 
     public static Instrument createInstrument(Map<String, String> fieldValues, InstrumentType type) {
 
-        LocalDate maturity = FieldHelper.getLocalDateFieldValue(fieldValues, MATURITY);
-        String securityDes = FieldHelper.getStringFieldValue(fieldValues, SECURITY_DES);
-        String figi = FieldHelper.getStringFieldValue(fieldValues, FIGI);
-        String compositeFigi = FieldHelper.getStringFieldValue(fieldValues, COMPOSITE_FIGI);
-        String blExchange = FieldHelper.getStringFieldValue(fieldValues, EXCHANGE);
-        String marketSector = FieldHelper.getStringFieldValue(fieldValues, MARKET_SECTOR_DES);
-        Integer marketSectorId = FieldHelper.getIntFieldValue(fieldValues, MARKET_SECTOR);
-        String currency = FieldHelper.getStringFieldValue(fieldValues, CRNCY);
-        String cfiCode = FieldHelper.getStringFieldValue(fieldValues, CFI_CODE);
-        String bloombergCfiCode = FieldHelper.getStringFieldValue(fieldValues, BLOOMBERG_CFI_CODE);
-        String countryIso = FieldHelper.getStringFieldValue(fieldValues, COUNTRY_ISO);
-        String countryDomicile = FieldHelper.getStringFieldValue(fieldValues, CNTRY_OF_DOMICILE);
-        BigDecimal tradeLotSize = FieldHelper.getBigDecimalFieldValue(fieldValues, PX_TRADE_LOT_SIZE);
-        BigDecimal quoteLotSize = FieldHelper.getBigDecimalFieldValue(fieldValues, PX_QUOTE_LOT_SIZE);
-        BigDecimal roundLotSize = FieldHelper.getBigDecimalFieldValue(fieldValues, PX_ROUND_LOT_SIZE);
-        String currencyQuoteFactor = FieldHelper.getStringFieldValue(fieldValues, QUOTE_FACTOR);
+        LocalDate maturity = FieldParser.getLocalDateFieldValue(fieldValues, MATURITY);
+        String securityDes = FieldParser.getStringFieldValue(fieldValues, SECURITY_DES);
+        String figi = FieldParser.getStringFieldValue(fieldValues, FIGI);
+        String compositeFigi = FieldParser.getStringFieldValue(fieldValues, COMPOSITE_FIGI);
+        String blExchange = FieldParser.getStringFieldValue(fieldValues, EXCHANGE);
+        String marketSector = FieldParser.getStringFieldValue(fieldValues, MARKET_SECTOR_DES);
+        Integer marketSectorId = FieldParser.getIntFieldValue(fieldValues, MARKET_SECTOR);
+        String currency = FieldParser.getStringFieldValue(fieldValues, CRNCY);
+        String cfiCode = FieldParser.getStringFieldValue(fieldValues, CFI_CODE);
+        String bloombergCfiCode = FieldParser.getStringFieldValue(fieldValues, BLOOMBERG_CFI_CODE);
+        String countryIso = FieldParser.getStringFieldValue(fieldValues, COUNTRY_ISO);
+        String countryDomicile = FieldParser.getStringFieldValue(fieldValues, CNTRY_OF_DOMICILE);
+        BigDecimal tradeLotSize = FieldParser.getBigDecimalFieldValue(fieldValues, PX_TRADE_LOT_SIZE);
+        BigDecimal quoteLotSize = FieldParser.getBigDecimalFieldValue(fieldValues, PX_QUOTE_LOT_SIZE);
+        BigDecimal roundLotSize = FieldParser.getBigDecimalFieldValue(fieldValues, PX_ROUND_LOT_SIZE);
+        String currencyQuoteFactor = FieldParser.getStringFieldValue(fieldValues, QUOTE_FACTOR);
 
         if (blExchange == null) {
             log.warn("Not created instrument from response field {} because field EXCHANGE is null",

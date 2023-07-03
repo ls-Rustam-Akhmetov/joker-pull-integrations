@@ -2,9 +2,9 @@ package ru.example.bloomberg.out.ws.helper;
 
 import java.math.BigDecimal;
 
-public class BloombergUtils {
+public class CalculationUtils {
 
-    private BloombergUtils() {
+    private CalculationUtils() {
     }
 
     public static BigDecimal getAccruedInterest(BigDecimal nominal, BigDecimal intAcc) {

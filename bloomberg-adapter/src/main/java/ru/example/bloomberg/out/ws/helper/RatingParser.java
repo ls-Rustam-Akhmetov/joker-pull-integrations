@@ -5,11 +5,11 @@ import ru.example.bloomberg.model.instrument.Rating;
 import java.util.Map;
 
 import static ru.example.bloomberg.model.Constant.InstrumentFields.*;
-import static ru.example.bloomberg.out.ws.helper.FieldHelper.getStringFieldValue;
+import static ru.example.bloomberg.out.ws.helper.FieldParser.getStringFieldValue;
 
-public class RatingHelper {
+public class RatingParser {
 
-    private RatingHelper() {
+    private RatingParser() {
     }
 
     static Rating getRating(Map<String, String> fieldValues) {
