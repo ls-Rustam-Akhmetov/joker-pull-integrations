@@ -35,8 +35,7 @@ public class ResponseParser {
     }
 
 
-    public static List<Instrument> retrieveInstruments(List<InstrumentData> instrumentDataList,
-                                                       List<String> fields) {
+    public static List<Instrument> retrieveInstruments(List<InstrumentData> instrumentDataList, List<String> fields) {
         return instrumentDataList.stream()
                 .map(instrumentData -> createInstrument(instrumentData, fields))
                 .collect(Collectors.toList());
@@ -148,7 +147,7 @@ public class ResponseParser {
 
     private static Instrument createInstrument(InstrumentData instrumentData, List<String> fields) {
         Map<String, String> fieldValues = makeFieldValues(instrumentData, fields);
-        log.debug("Field values for instrument from bloomberg:{}", fieldValues.toString());
+        log.debug("Field values for instrument from bloomberg:{}", fieldValues);
         return ResponseParser.createInstrument(fieldValues);
     }
 
@@ -179,8 +178,7 @@ public class ResponseParser {
         };
     }
 
-    public static List<Quote> retrieveQuotes(List<InstrumentData> instrumentDataList,
-                                             List<String> fields) {
+    public static List<Quote> retrieveQuotes(List<InstrumentData> instrumentDataList, List<String> fields) {
         return instrumentDataList.stream()
                 .map(instrumentData -> createQuote(instrumentData, fields))
                 .collect(Collectors.toList());
@@ -188,7 +186,7 @@ public class ResponseParser {
 
     private static Quote createQuote(InstrumentData instrumentData, List<String> fields) {
         Map<String, String> fieldValues = makeFieldValues(instrumentData, fields);
-        log.debug("Field values for quotes from bloomberg:{}", fieldValues.toString());
+        log.debug("Field values for quotes from bloomberg:{}", fieldValues);
         return QuoteHelper.createQuote(fieldValues);
     }
 

@@ -13,15 +13,9 @@ import ru.example.bloomberg.model.instrument.Instrument;
 import ru.example.bloomberg.model.quote.Quote;
 import ru.example.bloomberg.out.ws.helper.BloombergRequestHelper;
 import ru.example.bloomberg.out.ws.helper.ResponseParser;
-import ru.example.bloomberg.out.ws.helper.QuoteHelper;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-
-import static java.util.stream.Collectors.toList;
-import static ru.example.bloomberg.model.Constant.QuoteFields.PX_LAST;
-import static ru.example.bloomberg.model.Constant.QuoteFields.YLD_CNV_MID;
 
 @Slf4j
 @Repository

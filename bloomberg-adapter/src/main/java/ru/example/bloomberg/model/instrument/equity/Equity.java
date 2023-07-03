@@ -11,8 +11,8 @@ import ru.example.bloomberg.model.instrument.Rating;
 @ToString(callSuper = true)
 public class Equity extends Instrument {
 
-    private EquityStatic staticData;
-    private Rating rating;
+    private final EquityStatic staticData;
+    private final Rating rating;
 
     public Equity(
             Instrument instrument,

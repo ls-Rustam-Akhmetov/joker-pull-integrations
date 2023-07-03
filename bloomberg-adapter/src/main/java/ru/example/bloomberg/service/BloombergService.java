@@ -109,7 +109,7 @@ public class BloombergService {
         List<Instrument> instruments = response.getInstruments();
         List<Dividend> dividends = response.getDividends();
         fillInstrumentsWithExchange(requestLog.getSyncs(), instruments, quotes);
-        saveFigiToSynchronizations(requestLog.getSyncs(), instruments, quotes);
+        saveIsinToSynchronizations(requestLog.getSyncs(), instruments, quotes);
 
         kafkaProducer.sendAllInstruments(instruments);
         kafkaProducer.sendQuotes(quotes);
@@ -137,7 +137,7 @@ public class BloombergService {
         }
     }
 
-    private void saveFigiToSynchronizations(List<Sync> syncs, List<Instrument> instruments,
+    private void saveIsinToSynchronizations(List<Sync> syncs, List<Instrument> instruments,
                                             List<Quote> quotes) {
         if (CollectionUtils.isEmpty(syncs) || CollectionUtils.isEmpty(quotes)) {
             return;

@@ -9,7 +9,7 @@ public enum InstrumentType {
     CURRENCY("currency"),
     FUTURES("futures");
 
-    private String title;
+    private final String title;
 
     InstrumentType(String title) {
         this.title = title;

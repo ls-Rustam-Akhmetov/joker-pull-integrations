@@ -20,7 +20,7 @@ import java.time.LocalTime;
 @ToString
 public class Quote {
 
-    private String instrumentId; // figi or currencyPair like USDRUB
+    private String instrumentId; // isin or currencyPair like USDRUB
 
     private String source;
     private LocalDate date;
