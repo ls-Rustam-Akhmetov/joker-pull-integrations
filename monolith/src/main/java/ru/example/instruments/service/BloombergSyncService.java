@@ -3,8 +3,9 @@ package ru.example.instruments.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.example.bloomberg.model.db.RequestType;
-import ru.example.bloomberg.model.db.Sync;
+import ru.example.instruments.model.RequestType;
+import ru.example.instruments.model.Sync;
+
 
 import java.util.List;
 

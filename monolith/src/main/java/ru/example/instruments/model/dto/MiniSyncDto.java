@@ -2,8 +2,9 @@ package ru.example.instruments.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import ru.example.bloomberg.model.Exchange;
-import ru.example.bloomberg.model.db.Sync;
+import ru.example.instruments.model.Exchange;
+import ru.example.instruments.model.Sync;
+
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

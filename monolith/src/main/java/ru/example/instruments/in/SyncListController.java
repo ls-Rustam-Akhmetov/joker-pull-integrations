@@ -3,11 +3,12 @@ package ru.example.instruments.in;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-import ru.example.bloomberg.model.Exchange;
-import ru.example.bloomberg.model.db.Sync;
-import ru.example.bloomberg.model.dto.MiniSyncDto;
-import ru.example.bloomberg.model.dto.SyncDto;
-import ru.example.bloomberg.service.SyncService;
+import ru.example.instruments.model.Exchange;
+import ru.example.instruments.model.Sync;
+import ru.example.instruments.model.dto.MiniSyncDto;
+import ru.example.instruments.model.dto.SyncDto;
+import ru.example.instruments.service.SyncService;
+
 
 import java.util.List;
 import java.util.Set;

@@ -2,8 +2,6 @@ package ru.example.instruments.model;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.example.bloomberg.model.instrument.Dividend;
-import ru.example.bloomberg.model.quote.Quote;
 
 import java.util.List;
 

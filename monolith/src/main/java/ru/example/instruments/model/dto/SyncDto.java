@@ -1,8 +1,9 @@
 package ru.example.instruments.model.dto;
 
 import lombok.Data;
-import ru.example.bloomberg.model.Exchange;
-import ru.example.bloomberg.model.db.Sync;
+import ru.example.instruments.model.Exchange;
+import ru.example.instruments.model.Sync;
+
 
 @Data
 public class SyncDto {
