@@ -1,10 +1,11 @@
 package ru.example.instruments.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
-@EnableMongoAuditing
-public class MongoConfig {
+@EnableScheduling
+public class SchedulingConfig {
 
 }
+

@@ -19,4 +19,14 @@ public class Bond extends Instrument {
     public Bond() {
         this.setType(InstrumentType.BOND);
     }
+
+    public Bond(
+            Instrument instrument,
+            BondStatic staticData,
+            Rating rating
+    ) {
+        super(instrument);
+        this.staticData = staticData;
+        this.rating = rating;
+    }
 }

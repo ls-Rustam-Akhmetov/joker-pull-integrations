@@ -46,4 +46,26 @@ public class Instrument {
     private String currencyQuoteFactor;
 
     private String marketStatus;
+
+    public Instrument(Instrument instrument) {
+        this.id = instrument.id;
+        this.exchange = instrument.exchange;
+        this.blExchange = instrument.blExchange;
+        this.lastModified = instrument.lastModified;
+        this.endOfUseDate = instrument.endOfUseDate;
+        this.user = instrument.user;
+        this.type = instrument.type;
+        this.ticker = instrument.ticker;
+        this.source = instrument.source;
+        this.marketSector = instrument.marketSector;
+        this.marketSectorId = instrument.marketSectorId;
+        this.cfiCode = instrument.cfiCode;
+        this.bloombergCfiCode = instrument.bloombergCfiCode;
+        this.countryIso = instrument.countryIso;
+        this.countryDomicile = instrument.countryDomicile;
+        this.tradeLotSize = instrument.tradeLotSize;
+        this.quoteLotSize = instrument.quoteLotSize;
+        this.roundLotSize = instrument.roundLotSize;
+        this.currencyQuoteFactor = instrument.currencyQuoteFactor;
+    }
 }

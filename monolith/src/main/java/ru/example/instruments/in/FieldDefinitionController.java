@@ -1,4 +1,4 @@
-package ru.example.instruments.controller;
+package ru.example.instruments.in;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

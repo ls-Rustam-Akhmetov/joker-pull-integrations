@@ -1,6 +1,7 @@
 package ru.example.instruments.model.bond;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BondStatic {
 
     private String isin;
@@ -19,7 +21,7 @@ public class BondStatic {
     private String currency;
     private BigDecimal nominal;
     private LocalDate issueDate;
-    private BigDecimal issuedAmount;
+    private Long issuedAmount;
     private String paymentRank;
     private String industrySector;
     private Boolean putable;

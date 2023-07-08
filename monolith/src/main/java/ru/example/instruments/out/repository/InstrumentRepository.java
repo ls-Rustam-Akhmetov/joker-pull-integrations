@@ -1,4 +1,4 @@
-package ru.example.instruments.repository;
+package ru.example.instruments.out.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;

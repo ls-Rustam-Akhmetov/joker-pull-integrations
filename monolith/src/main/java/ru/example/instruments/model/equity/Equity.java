@@ -16,6 +16,16 @@ public class Equity extends Instrument {
     private EquityRecommendation recommendation;
     private Rating rating;
 
+    public Equity(
+            Instrument instrument,
+            EquityStatic staticData,
+            Rating rating
+    ) {
+        super(instrument);
+        this.staticData = staticData;
+        this.rating = rating;
+    }
+
     public Equity() {
         this.setType(InstrumentType.EQUITY);
     }

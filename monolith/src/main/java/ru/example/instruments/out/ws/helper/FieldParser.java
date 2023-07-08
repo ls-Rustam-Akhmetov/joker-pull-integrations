@@ -1,9 +1,10 @@
-package ru.example.bloomberg.out.ws.helper;
+package ru.example.instruments.out.ws.helper;
 
+import com.bloomberg.services.dlws.MarketSector;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import ru.example.bloomberg.model.MarketSector;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,7 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
 
-import static ru.example.bloomberg.model.Constant.InstrumentFields.MARKET_SECTOR_DES;
+import static ru.example.instruments.model.Constant.InstrumentFields.MARKET_SECTOR_DES;
+
 
 @Slf4j
 public class FieldParser {

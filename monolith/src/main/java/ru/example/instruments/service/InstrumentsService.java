@@ -14,8 +14,7 @@ import ru.example.instruments.model.bond.Bond;
 import ru.example.instruments.model.bond.BondStatic;
 import ru.example.instruments.model.equity.Equity;
 import ru.example.instruments.model.equity.EquityStatic;
-import ru.example.instruments.model.exception.BadRequestException;
-import ru.example.instruments.repository.InstrumentRepository;
+import ru.example.instruments.out.repository.InstrumentRepository;
 import ru.example.instruments.util.InstrumentUtils;
 
 import java.util.ArrayList;

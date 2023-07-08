@@ -1,7 +1,10 @@
+import io.mateo.cxf.codegen.wsdl2java.Wsdl2Java
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.1'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "io.mateo.cxf-codegen" version "1.2.1" //integration dependency
 }
 
 java {
@@ -16,21 +19,45 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.kafka:spring-kafka'
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 
     // cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.github.ben-manes.caffeine:caffeine'
 
-
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-
+    //Mapper
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     implementation "org.apache.commons:commons-csv:1.10.0"
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+    //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    //BL integration dependencies
+    cxfCodegen "jakarta.xml.ws:jakarta.xml.ws-api:4.0.0"
+    cxfCodegen "jakarta.annotation:jakarta.annotation-api:2.1.1"
+    implementation "jakarta.xml.ws:jakarta.xml.ws-api:4.0.0"
+    implementation "jakarta.annotation:jakarta.annotation-api:2.1.1"
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'javax.xml.ws:jaxws-api:2.3.1'
+    implementation 'com.sun.xml.ws:jaxws-rt:4.0.1'
+}
+
+//BL integration dependencies
+tasks.register("bloomberg", Wsdl2Java) {
+    toolOptions {
+        wsdl.set(file("${projectDir}/src/main/resources/wsdl/dlws.wsdl"))
+        autoNameResolution.set(true)
+        packageNames.set(["com.bloomberg.services.dlws"])
+    }
+}
+
+//BL integration dependencies
+cxfCodegen {
+    cxfVersion = "4.0.0"
 }

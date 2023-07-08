@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.example.instruments.model.FieldDefinition;
 import ru.example.instruments.model.exception.NotFoundException;
-import ru.example.instruments.repository.FieldDefinitionRepository;
+import ru.example.instruments.out.repository.FieldDefinitionRepository;
 
 import java.util.HashSet;
 import java.util.List;
