@@ -30,7 +30,7 @@ public class BloombergAdapter {
     /**
      * retrieve data from bloomber by request id
      */
-    public Response requestForDataRetrieval(String bloombergRequestId) {
+    public Response requestForDataAcquiring(String bloombergRequestId) {
         RetrieveGetDataResponse response = makeRequestForData(bloombergRequestId);
         int responseStatusCode = response.getStatusCode().getCode();
         Response.Status responseStatus = makeResponseStatus(responseStatusCode);

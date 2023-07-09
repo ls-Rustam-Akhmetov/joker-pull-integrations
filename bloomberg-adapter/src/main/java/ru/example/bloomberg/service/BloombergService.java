@@ -75,7 +75,7 @@ public class BloombergService {
         Response response;
         Sync requestSync = requestLog.getSyncs().get(0);
         try {
-            response = bloombergAdapter.requestForDataRetrieval(bloombergRequestId);
+            response = bloombergAdapter.requestForDataAcquiring(bloombergRequestId);
         } catch (Exception e) {
             log.error("Sync: {}, Error processed while try to retrieve data: {}",
                     requestSync,
