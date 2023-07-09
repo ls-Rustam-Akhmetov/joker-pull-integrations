@@ -19,9 +19,7 @@ import ru.example.bloomberg.out.kafka.KafkaProducer;
 import ru.example.bloomberg.out.ws.BloombergAdapter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -33,7 +31,6 @@ public class BloombergService {
     private final RequestLogService requestLogService;
     private final KafkaProducer kafkaProducer;
     private final BloombergConfig bloombergConfig;
-    private final SyncService syncService;
 
     public void requestForDataPreparation(List<Sync> syncs, RequestType requestType) {
         if (CollectionUtils.isEmpty(syncs)) {
@@ -87,7 +84,7 @@ public class BloombergService {
         Response.Status responseStatusCode = response.getStatus();
         log.info("Response status code: {} for Request_id:{}", responseStatusCode, bloombergRequestId);
         if (responseStatusCode == Response.Status.DATA_READY) {
-            dataReadyProcessing(requestLog, response);
+            dataReadyProcessing(response);
             resultResponseLog.setStatus(RequestLogStatus.PROCESSING_FINISHED);
             return resultResponseLog;
         }
@@ -104,65 +101,13 @@ public class BloombergService {
         return resultResponseLog;
     }
 
-    private void dataReadyProcessing(RequestLog requestLog, Response response) {
+    private void dataReadyProcessing(Response response) {
         List<Quote> quotes = response.getQuotes();
         List<Instrument> instruments = response.getInstruments();
         List<Dividend> dividends = response.getDividends();
-        fillInstrumentsWithExchange(requestLog.getSyncs(), instruments, quotes);
-        saveIsinToSynchronizations(requestLog.getSyncs(), instruments, quotes);
 
         kafkaProducer.sendAllInstruments(instruments);
         kafkaProducer.sendQuotes(quotes);
         kafkaProducer.sendAllCorporateActions(ActionMapper.map(dividends));
-    }
-
-    private void fillInstrumentsWithExchange(List<Sync> syncs, List<Instrument> instruments,
-                                             List<Quote> quotes) {
-        if (CollectionUtils.isEmpty(syncs) || (CollectionUtils.isEmpty(instruments) && CollectionUtils
-                .isEmpty(quotes))) {
-            return;
-        }
-
-        for (int i = 0; i < syncs.size(); i++) {
-            Sync sync = syncs.get(i);
-            Instrument instrument = instruments.get(i);
-            Quote quote = quotes.get(i);
-
-            if (instrument != null) {
-                instrument.setExchange(sync.getExchange());
-            }
-            if (quote != null) {
-                quote.setExchange(sync.getExchange());
-            }
-        }
-    }
-
-    private void saveIsinToSynchronizations(List<Sync> syncs, List<Instrument> instruments,
-                                            List<Quote> quotes) {
-        if (CollectionUtils.isEmpty(syncs) || CollectionUtils.isEmpty(quotes)) {
-            return;
-        }
-
-        List<Sync> updatedSyncs = new ArrayList<>();
-
-        for (int i = 0; i < syncs.size(); i++) {
-            Sync sync = syncs.get(i);
-            Instrument instrument = instruments.get(i);
-            Quote quote = quotes.get(i);
-
-            if (quote != null && sync.getFigi() == null) {
-                String figi = quote.getFigi();
-                sync.setFigi(figi);
-                updatedSyncs.add(sync);
-            }
-            if (instrument != null && sync.getFigi() == null) {
-                String figi = instrument.getId();
-                sync.setFigi(figi);
-                updatedSyncs.add(sync);
-            }
-        }
-        List<Sync> correctSync = updatedSyncs.stream()
-                .filter(sync -> sync.getIsin() != null).collect(Collectors.toList());
-        syncService.save(correctSync);
     }
 }
